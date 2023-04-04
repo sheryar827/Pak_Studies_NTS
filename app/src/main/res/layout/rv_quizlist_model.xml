@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="item"
+            type="com.alltech4uforever.pakstudiesnts.models.QuizModel.QuizListModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="@dimen/row_padding"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:paddingTop="@dimen/row_padding"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_alignParentStart="true"
+            android:layout_width="@dimen/thumbnail"
+            android:layout_height="@dimen/thumbnail"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/row_padding"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_toEndOf="@id/thumbnail"
+            android:paddingStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/white"
+            android:text="@{item.name}"
+            android:textSize="@dimen/contact_name" />
+
+    </RelativeLayout>
+</layout>
