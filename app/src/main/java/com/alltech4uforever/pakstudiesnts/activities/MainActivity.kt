@@ -9,15 +9,17 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.alltech4uforever.pakstudiesnts.R
 import com.alltech4uforever.pakstudiesnts.databinding.ActivityMainBinding
+import com.alltech4uforever.pakstudiesnts.fragments.QuizCategoryFragment
 import com.alltech4uforever.pakstudiesnts.fragments.QuizFragment
 import com.alltech4uforever.pakstudiesnts.fragments.QuizListFragment
-import com.alltech4uforever.pakstudiesnts.fragments.QuizTypeFragment
+import com.alltech4uforever.pakstudiesnts.fragments.QuizModeFragment
 import com.alltech4uforever.pakstudiesnts.utils.QuizMode
 
 
 class MainActivity : AppCompatActivity(),
-    QuizTypeFragment.QuizTypeFragmentInterface,
-    QuizListFragment.QuizListFragmentListener{
+    QuizModeFragment.QuizTypeFragmentInterface,
+    QuizListFragment.QuizListFragmentListener,
+    QuizCategoryFragment.QuizCategoryFragmentListener{
 
     private lateinit var _binding : ActivityMainBinding
     private var hiddenToolbar = false
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity(),
 
         if (savedInstanceState == null) {
             supportActionBar!!.title = getString(R.string.app_name)
-            replaceFragment(QuizTypeFragment(), QuizTypeFragment.TAG)
+            replaceFragment(QuizCategoryFragment(), QuizCategoryFragment.TAG)
         }else {
             hiddenToolbar = savedInstanceState.getBoolean("toolbarHidden")
 
@@ -104,12 +106,12 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-    override fun noTimeMode() {
+    override fun noTimeMode(categoryName: String) {
 
         val frag = supportFragmentManager.findFragmentByTag(QuizListFragment.TAG)
         if (!(frag != null && frag.isVisible)) {
             supportActionBar!!.title = getString(R.string.no_time_mode)
-            replaceFragment(QuizListFragment.newInstance(QuizMode.NO_TIME_MODE.ordinal), QuizListFragment.TAG)
+            replaceFragment(QuizListFragment.newInstance(QuizMode.NO_TIME_MODE.ordinal, categoryName), QuizListFragment.TAG)
         }
     }
 
@@ -125,11 +127,19 @@ class MainActivity : AppCompatActivity(),
         TODO("Not yet implemented")
     }
 
-    override fun startQuiz(pageKey: Int) {
+    override fun startQuiz(pageKey: Int, categoryName: String) {
         val frag = supportFragmentManager.findFragmentByTag(QuizFragment.TAG)
         if (!(frag != null && frag.isVisible)) {
             supportActionBar!!.title = "Quiz $pageKey"
-            replaceFragment(QuizFragment.newInstance(pageKey), QuizFragment.TAG)
+            replaceFragment(QuizFragment.newInstance(pageKey, categoryName), QuizFragment.TAG)
+        }
+    }
+
+    override fun quizCategorySelected(categoryName: String) {
+        val frag = supportFragmentManager.findFragmentByTag(QuizModeFragment.TAG)
+        if (!(frag != null && frag.isVisible)) {
+            supportActionBar!!.title = getString(R.string.quiz_type)
+            replaceFragment(QuizModeFragment.newInstance(categoryName), QuizModeFragment.TAG)
         }
     }
 }

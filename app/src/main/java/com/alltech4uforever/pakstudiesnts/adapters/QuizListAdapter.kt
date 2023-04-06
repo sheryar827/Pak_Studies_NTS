@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alltech4uforever.pakstudiesnts.R
+import com.alltech4uforever.pakstudiesnts.databinding.RvQuizCategoryModelBinding
 import com.alltech4uforever.pakstudiesnts.databinding.RvQuizlistModelBinding
 import com.alltech4uforever.pakstudiesnts.models.QuizModel
 
 class QuizListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    var itemList = ArrayList<QuizModel>()
+    private var itemList = ArrayList<QuizModel>()
 
     var itemClickListener: ((view: View, item: QuizModel, position: Int) -> Unit)? = null
 
@@ -21,6 +22,12 @@ class QuizListAdapter : RecyclerView.Adapter<ViewHolder>() {
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
+            R.layout.rv_quiz_category_model -> ViewHolder.QuizCategoryViewHolder(
+                RvQuizCategoryModelBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             else -> throw java.lang.IllegalArgumentException("Invalid ViewType")
         }
     }
@@ -33,6 +40,7 @@ class QuizListAdapter : RecyclerView.Adapter<ViewHolder>() {
         /*setAnimation(holder.itemView, position)*/
         when(holder){
             is ViewHolder.QuizListViewHolder -> holder.bind(itemList[position] as QuizModel.QuizListModel)
+            is ViewHolder.QuizCategoryViewHolder -> holder.bind(itemList[position] as QuizModel.QuizCategoryModel)
         }
     }
 
@@ -40,6 +48,7 @@ class QuizListAdapter : RecyclerView.Adapter<ViewHolder>() {
         /* Log.d("INVALID ITEM", itemList[position].toString())*/
         return when(itemList[position]){
             is QuizModel.QuizListModel -> R.layout.rv_quizlist_model
+            is QuizModel.QuizCategoryModel -> R.layout.rv_quiz_category_model
             else->throw IllegalStateException("Invalid Item")
         }
     }

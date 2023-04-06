@@ -5,6 +5,8 @@ sealed class QuizModel{
                              val page: Int = 0
     ): QuizModel()
 
+    data class QuizCategoryModel(val categoryName: String? = null): QuizModel()
+
     data class QuestionModel(   val _id: Int = 0,
                                 val Question: String = "",
                                 val OptionA: String = "",

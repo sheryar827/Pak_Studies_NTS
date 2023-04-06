@@ -69,6 +69,6 @@ class DatabaseOpenHelper(context: Context) :
     companion object {
         private const val DB_NAME = "pakstudies.db"
         private var DB_PATH = ""
-        private const val DB_VERSION = 1
+        private const val DB_VERSION = 2
     }
 }

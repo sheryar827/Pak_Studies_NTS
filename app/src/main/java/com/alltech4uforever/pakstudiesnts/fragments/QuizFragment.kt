@@ -42,7 +42,8 @@ class QuizFragment : Fragment() {
                                                 container,
                                                 false)
 
-        val pageKey = arguments?.getInt("page_key", 0)!!
+        val pageKey = arguments?.getInt(PAGE_KEY, 0)!!
+        val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, "english")
 
         questionList = ArrayList()
 
@@ -57,7 +58,7 @@ class QuizFragment : Fragment() {
         }
 
 
-        questionList.addAll(getQuestions.readQues(quesstartPoint))
+        questionList.addAll(getQuestions.readQues(quesstartPoint, categoryName!!))
         questionList.shuffle()
         getQuestions.close()
 
@@ -187,9 +188,11 @@ class QuizFragment : Fragment() {
 
     companion object {
         const val TAG = "QuizFragment"
-        fun newInstance(pageKey: Int): QuizFragment {
+        const val PAGE_KEY = "page_key"
+        fun newInstance(pageKey: Int, categoryName: String): QuizFragment {
             val args = Bundle()
-            args.putInt("page_key", pageKey)
+            args.putInt(PAGE_KEY, pageKey)
+            args.putString(QuizModeFragment.QUIZ_CATG, categoryName)
             val fragment = QuizFragment()
             fragment.arguments = args
             return fragment

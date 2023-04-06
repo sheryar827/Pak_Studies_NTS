@@ -1,10 +1,11 @@
 package com.alltech4uforever.pakstudiesnts.database
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import com.alltech4uforever.pakstudiesnts.models.QuizModel
+
 
 class GetQuiz(context: Context) {
     private val openHelper: SQLiteOpenHelper
@@ -24,7 +25,7 @@ class GetQuiz(context: Context) {
         }
     }
 
-    fun readQuestion(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readQuestion(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
             "" //string that contains the required field  note that Ans is just a local string not related to Answer or Option...
@@ -36,13 +37,13 @@ class GetQuiz(context: Context) {
         c.close()
 
         return ans
-    }
+    }*/
 
-    fun readQues(quesStart:Int): ArrayList<QuizModel.QuestionModel>{
-        var questionList = ArrayList<QuizModel.QuestionModel>()
+    fun readQues(quesStart:Int, tableName: String): ArrayList<QuizModel.QuestionModel>{
+        val questionList = ArrayList<QuizModel.QuestionModel>()
 
         val c = database!!.rawQuery(
-            "SELECT * FROM $Table_name LIMIT $QUESLIMIT OFFSET $quesStart",
+            "SELECT * FROM $tableName LIMIT $QUESLIMIT OFFSET $quesStart",
             null
         ) //cursor to that query
 
@@ -70,7 +71,7 @@ class GetQuiz(context: Context) {
         return questionList
     }
 
-    fun readOptionA(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readOptionA(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
             "" //string that contains the required field  note that Ans is just a local string not related to Answer or Option...
@@ -81,9 +82,9 @@ class GetQuiz(context: Context) {
         ans = if (c.moveToFirst()) c.getString(0) else ""
         c.close()
         return ans
-    }
+    }*/
 
-    fun readOptionB(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readOptionB(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
             "" //string that contains the required field  note that Ans is just a local string not related to Answer or Option...
@@ -94,9 +95,9 @@ class GetQuiz(context: Context) {
         ans = if (c.moveToFirst()) c.getString(0) else ""
         c.close()
         return ans
-    }
+    }*/
 
-    fun readOptionC(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readOptionC(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
             "" //string that contains the required field  note that Ans is just a local string not related to Answer or Option...
@@ -107,9 +108,9 @@ class GetQuiz(context: Context) {
         ans = if (c.moveToFirst()) c.getString(0) else ""
         c.close()
         return ans
-    }
+    }*/
 
-    fun readOptionD(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readOptionD(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
             "" //string that contains the required field  note that Ans is just a local string not related to Answer or Option...
@@ -120,9 +121,9 @@ class GetQuiz(context: Context) {
         ans = if (c.moveToFirst()) c.getString(0) else ""
         c.close()
         return ans
-    }
+    }*/
 
-    fun readAnswer(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
+    /*fun readAnswer(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans = "" //string that contains the required field
         val c = database!!.rawQuery(
@@ -132,13 +133,13 @@ class GetQuiz(context: Context) {
         ans = if (c.moveToFirst()) c.getString(0) else ""
         c.close()
         return ans
-    }
+    }*/
 
     // return no of rows
-    fun quesCount() : Int{
+    fun quesCount(tableName: String) : Int{
 
         val c = database!!.rawQuery(
-            "SELECT COUNT(*) FROM $Table_name",
+            "SELECT COUNT(*) FROM $tableName",
             null
         )
 
@@ -150,16 +151,38 @@ class GetQuiz(context: Context) {
 
     }
 
+    fun getTableName() : ArrayList<QuizModel.QuizCategoryModel>{
+        val catgoryList =  ArrayList<QuizModel.QuizCategoryModel>()
+        val c: Cursor = database!!.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null)
+
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast) {
+                catgoryList.add(QuizModel.QuizCategoryModel(c.getString(0)))
+                c.moveToNext()
+            }
+        }
+
+        c.close()
+
+        // removing non usable tables
+        catgoryList.remove(QuizModel.QuizCategoryModel(sqlite_sequence))
+        catgoryList.remove(QuizModel.QuizCategoryModel(android_metadata))
+
+        return catgoryList
+    }
+
     companion object {
         private var instance: GetQuiz? = null
-        private const val Table_name = "pakstudies" //name of table
-        private const val uid = "_id" //name of column1
-        private const val Question = "Question" //name of column2
-        private const val OptionA = "OptionA" //name of column3
-        private const val OptionB = "OptionB" //name of column4
-        private const val OptionC = "OptionC" //name of column5
-        private const val OptionD = "OptionD" //name of column6
-        private const val Answer = "Answer" //name of column7
+        private const val sqlite_sequence = "sqlite_sequence"
+        private const val android_metadata = "android_metadata"
+        //private const val Table_name = "" //name of table
+        //private const val uid = "id" //name of column1
+        //private const val Question = "question" //name of column2
+        //private const val OptionA = "optiona" //name of column3
+        //private const val OptionB = "optionb" //name of column4
+        //private const val OptionC = "optionc" //name of column5
+        //private const val OptionD = "optiond" //name of column6
+        //private const val Answer = "answer" //name of column7
         private const val QUESLIMIT = 10 // 10 Question in one time
         fun getInstance(context: Context): GetQuiz? {
             if (instance == null) {

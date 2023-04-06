@@ -2,7 +2,6 @@ package com.alltech4uforever.pakstudiesnts.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,8 @@ class QuizListFragment : Fragment() {
         getQuizCount = GetQuiz.getInstance(requireContext())!!
         getQuizCount.open()
 
+        //getQuizCount.getTableName()
+
     }
 
     override fun onCreateView(
@@ -42,6 +43,8 @@ class QuizListFragment : Fragment() {
     ): View {
 
         _binding = FragmentQuizListBinding.inflate(inflater, container, false)
+
+        val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, "english")
 
         _binding.quizListRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -52,14 +55,14 @@ class QuizListFragment : Fragment() {
         adapterList.itemClickListener = { _, item, _ ->
             //view.startAnimation(btnAnim)
             when(item){
-                is QuizModel.QuizListModel -> mListener?.startQuiz(item.page)
+                is QuizModel.QuizListModel -> mListener?.startQuiz(item.page, categoryName!!)
                 else -> throw java.lang.IllegalArgumentException("Invalid ViewType")
             }
             //Log.d("CLICKED", message)
             //Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
 
-        populateQuizList(getQuizCount.quesCount())
+        //populateQuizList(getQuizCount.quesCount())
 
         getQuizCount.close()
 
@@ -95,15 +98,16 @@ class QuizListFragment : Fragment() {
     }
 
     interface QuizListFragmentListener{
-        fun startQuiz(pageKey: Int)
+        fun startQuiz(pageKey: Int, categoryName: String)
     }
 
     companion object {
         const val TAG = "QuizListFragment"
-
-        fun newInstance(quizMode: Int): QuizListFragment {
+        const val QUIZ_MODE = "quiz_mode"
+        fun newInstance(quizMode: Int, categoryName: String): QuizListFragment {
             val args = Bundle()
-            args.putInt("quiz_mode", quizMode)
+            args.putInt(QUIZ_MODE, quizMode)
+            args.putString(QuizModeFragment.QUIZ_CATG, categoryName)
             val fragment = QuizListFragment()
             fragment.arguments = args
             return fragment
