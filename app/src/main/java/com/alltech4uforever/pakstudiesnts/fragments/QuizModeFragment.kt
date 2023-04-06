@@ -40,7 +40,7 @@ class QuizModeFragment : Fragment(),
     override fun onClick(view: View) {
         when (view) {
             _binding.optionNotimemode -> {
-                mListener?.noTimeMode(arguments?.getString(QuizModeFragment.QUIZ_CATG, "english")!!)
+                mListener?.noTimeMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
             _binding.optionTimemode -> {
                 mListener?.timeMode()
@@ -83,6 +83,7 @@ class QuizModeFragment : Fragment(),
     }
 
     companion object {
+        const val DEFAULT_CATG = "english"
         const val TAG = "QuizTypeFragment"
         const val QUIZ_CATG = "quiz_category"
         fun newInstance(quizCategory: String): QuizModeFragment {

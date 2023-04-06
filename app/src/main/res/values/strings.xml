@@ -17,4 +17,6 @@
     <string name="beat_the_time_mode">Beat The Time Mode</string>
     <string name="preparation_mode">Preparation Mode</string>
     <string name="challenge_mode">Challenge Mode</string>
+    <string name="prev">Prev</string>
+    <string name="next">next</string>
 </resources>

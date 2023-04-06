@@ -111,7 +111,8 @@ class MainActivity : AppCompatActivity(),
         val frag = supportFragmentManager.findFragmentByTag(QuizListFragment.TAG)
         if (!(frag != null && frag.isVisible)) {
             supportActionBar!!.title = getString(R.string.no_time_mode)
-            replaceFragment(QuizListFragment.newInstance(QuizMode.NO_TIME_MODE.ordinal, categoryName), QuizListFragment.TAG)
+            //replaceFragment(QuizListFragment.newInstance(QuizMode.NO_TIME_MODE.ordinal, categoryName), QuizListFragment.TAG)
+            replaceFragment(QuizFragment.newInstance(categoryName), QuizListFragment.TAG)
         }
     }
 
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity(),
         val frag = supportFragmentManager.findFragmentByTag(QuizFragment.TAG)
         if (!(frag != null && frag.isVisible)) {
             supportActionBar!!.title = "Quiz $pageKey"
-            replaceFragment(QuizFragment.newInstance(pageKey, categoryName), QuizFragment.TAG)
+            replaceFragment(QuizFragment.newInstance(categoryName), QuizFragment.TAG)
         }
     }
 

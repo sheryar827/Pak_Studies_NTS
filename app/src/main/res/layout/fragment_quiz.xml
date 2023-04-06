@@ -69,11 +69,11 @@
 
     </ScrollView>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:background="#6d748e"
         android:foregroundGravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,19 +82,72 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/ivPrev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
-            android:layout_marginStart="16dp"
-            android:contentDescription="@string/quiz_report" />
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/arrow_prev"
+            android:contentDescription="@string/prev" />
+
+        <EditText
+            android:id="@+id/etPageNum"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:background="@drawable/quiz_question_background"
+            app:layout_constraintStart_toEndOf="@id/ivPrev"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tvForwardSlash"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=" / "
+            android:textSize="@dimen/tvTotalCount"
+            app:layout_constraintStart_toEndOf="@id/etPageNum"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tvTotalCount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/tvTotalCount"
+            app:layout_constraintStart_toEndOf="@id/tvForwardSlash"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/ivNext"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/arrow_go"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/ivNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:layout_marginEnd="16dp"
-            android:contentDescription="@string/quiz_favourite" />
-    </FrameLayout>
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/arrow_next"
+            android:contentDescription="@string/next" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

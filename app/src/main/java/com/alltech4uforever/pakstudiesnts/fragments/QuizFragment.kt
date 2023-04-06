@@ -1,6 +1,8 @@
 package com.alltech4uforever.pakstudiesnts.fragments
 
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +22,7 @@ class QuizFragment : Fragment() {
     /*private var mListener: QuizFragmentInterface? = null*/
     private var ans: String = ""
     private var quesNumber = 0
+    private var defaultQuizNum = 1
     private lateinit var getQuestions : GetQuiz
     private lateinit var questionList : ArrayList<QuizModel.QuestionModel>
     private var btns = ArrayList<RadioButton>()
@@ -42,23 +45,36 @@ class QuizFragment : Fragment() {
                                                 container,
                                                 false)
 
-        val pageKey = arguments?.getInt(PAGE_KEY, 0)!!
-        val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, "english")
+
+
+
+        val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, QuizModeFragment.DEFAULT_CATG)
 
         questionList = ArrayList()
+
+
+        // 10 questions per quiz
+        val totalQuizzes = getQuestions.quesCount(categoryName!!)/10
+
+        _binding.tvTotalCount.text =  totalQuizzes.toString()
+        _binding.etPageNum.setText(defaultQuizNum.toString())
+
+
+        // limit total num of digits enter in edittext field
+        _binding.etPageNum.filters = arrayOf<InputFilter>(LengthFilter(totalQuizzes.toString().length))
 
 
         //Get the quiz end point
         //val quesendPoint: Int = pageKey * 10 + 1
 
         //Get the qui starting point
-        var quesstartPoint: Int = (pageKey - 1) * 10
-        if (quesstartPoint == 0) {
-            quesstartPoint = 1
-        }
+//        var quesstartPoint: Int = (pageKey - 1) * 10
+//        if (quesstartPoint == 0) {
+//            quesstartPoint = 1
+//        }
 
 
-        questionList.addAll(getQuestions.readQues(quesstartPoint, categoryName!!))
+        questionList.addAll(getQuestions.readQues(defaultQuizNum, categoryName))
         questionList.shuffle()
         getQuestions.close()
 
@@ -115,7 +131,7 @@ class QuizFragment : Fragment() {
         _binding.quizGroup.isEnabled = false
         val correct: Boolean
         val optionSelected =
-            Objects.requireNonNull<RadioButton>(getRadioButton(_binding.quizGroup.getCheckedRadioButtonId())).text.toString()
+            Objects.requireNonNull(getRadioButton(_binding.quizGroup.checkedRadioButtonId)).text.toString()
                 .trim { it <= ' ' }
         correct = optionSelected == answer
         if (correct) {
@@ -188,10 +204,8 @@ class QuizFragment : Fragment() {
 
     companion object {
         const val TAG = "QuizFragment"
-        const val PAGE_KEY = "page_key"
-        fun newInstance(pageKey: Int, categoryName: String): QuizFragment {
+        fun newInstance(categoryName: String): QuizFragment {
             val args = Bundle()
-            args.putInt(PAGE_KEY, pageKey)
             args.putString(QuizModeFragment.QUIZ_CATG, categoryName)
             val fragment = QuizFragment()
             fragment.arguments = args

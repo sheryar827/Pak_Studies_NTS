@@ -16,7 +16,7 @@
     <dimen name="quiz_question_counter_width">100dp</dimen>
     <dimen name="progress_text_size">22sp</dimen>
     <dimen name="progress_bar_width">4dp</dimen>
-
+    <dimen name="tvTotalCount">32dp</dimen>
     <dimen name="auto_fill_recyclerview_column_width">105dp</dimen>
     <dimen name="auto_fill_rv_select_quiz_column_width">150dp</dimen>
 </resources>
