@@ -43,15 +43,16 @@ class QuizModeFragment : Fragment(),
                 mListener?.noTimeMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
             _binding.optionTimemode -> {
-                mListener?.timeMode()
+                /*Toast.makeText(requireContext(), "CLICK", Toast.LENGTH_LONG).show()*/
+                mListener?.timeMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
 
             _binding.optionBeatthetimemode -> {
-                mListener?.beatTheTimeMode()
+                mListener?.beatTheTimeMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
 
             _binding.optionPrepmode -> {
-                mListener?.preparationMode()
+                mListener?.preparationMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
 
         }
@@ -77,9 +78,9 @@ class QuizModeFragment : Fragment(),
 
     interface QuizTypeFragmentInterface{
         fun noTimeMode(quizCategory: String)
-        fun timeMode()
-        fun beatTheTimeMode()
-        fun preparationMode()
+        fun timeMode(quizCategory: String)
+        fun beatTheTimeMode(quizCategory: String)
+        fun preparationMode(quizCategory: String)
     }
 
     companion object {

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="notime"
+            type="com.alltech4uforever.pakstudiesnts.models.QuizModel.QuesModelNOTime" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvQuestionModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="@android:color/black"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardMaxElevation="10dp"
+        app:cardPreventCornerOverlap="true"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp">
+
+        <TextView
+            android:id="@+id/tvQuestion"
+            style="@style/Base.TextAppearance.AppCompat.Headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="16dp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:text="@{notime.question}"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:textIsSelectable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/quiz_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvQuestion">
+
+            <RadioButton
+                android:id="@+id/option_a"
+                style="@style/QuizAnswersButton"
+                android:text="@{notime.optionA}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/option_b"
+                style="@style/QuizAnswersButton"
+                android:text="@{notime.optionB}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/option_c"
+                style="@style/QuizAnswersButton"
+                android:text="@{notime.optionC}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/option_d"
+                style="@style/QuizAnswersButton"
+                android:text="@{notime.optionD}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RadioGroup>
+
+            <!--<TextView
+                android:id="@+id/tvAnswer"
+                style="@style/Base.TextAppearance.AppCompat.Headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:text="@{notime.answer}"
+                android:visibility="invisible"
+                android:textColor="@android:color/holo_green_dark"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:textIsSelectable="true"
+                app:layout_constraintTop_toBottomOf="@id/quiz_group"
+                app:layout_constraintStart_toStartOf="parent" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

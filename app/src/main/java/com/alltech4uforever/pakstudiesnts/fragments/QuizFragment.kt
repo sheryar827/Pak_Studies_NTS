@@ -1,8 +1,9 @@
 package com.alltech4uforever.pakstudiesnts.fragments
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.InputFilter.LengthFilter
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,29 +11,31 @@ import android.widget.RadioButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.alltech4uforever.pakstudiesnts.R
-import com.alltech4uforever.pakstudiesnts.database.GetQuiz
 import com.alltech4uforever.pakstudiesnts.databinding.FragmentQuizBinding
-import com.alltech4uforever.pakstudiesnts.models.QuizModel
-import java.util.*
+import java.util.Objects
 
 
 class QuizFragment : Fragment() {
 
     private lateinit var _binding: FragmentQuizBinding
-    /*private var mListener: QuizFragmentInterface? = null*/
-    private var ans: String = ""
-    private var quesNumber = 0
-    private var defaultQuizNum = 1
-    private lateinit var getQuestions : GetQuiz
-    private lateinit var questionList : ArrayList<QuizModel.QuestionModel>
+    private var mListener: QuizFragmentInterface? = null
+    //private lateinit var question: QuizModel.QuestionModel
+    //private var ans: String = ""
+    //private var quesNumber = 0
+
+    private var counter: CountDownTimer? = null
+    private val quizTime: Long = 15000
+    private val timeSec: Long = 1000
+    private var counterPosition: Long = 0
+
     private var btns = ArrayList<RadioButton>()
-    private var answer: String = ""
+    private var answer: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getQuestions = GetQuiz.getInstance(requireContext())!!
-        getQuestions.open()
+        //getQuestions = GetQuiz.getInstance(requireContext())!!
+        //getQuestions.open()
 
     }
 
@@ -48,20 +51,20 @@ class QuizFragment : Fragment() {
 
 
 
-        val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, QuizModeFragment.DEFAULT_CATG)
+        //val categoryName = arguments?.getString(QuizModeFragment.QUIZ_CATG, QuizModeFragment.DEFAULT_CATG)
 
-        questionList = ArrayList()
+        //questionList = ArrayList()
 
 
         // 10 questions per quiz
-        val totalQuizzes = getQuestions.quesCount(categoryName!!)/10
+        //val totalQuizzes = getQuestions.quesCount(categoryName!!)/10
 
-        _binding.tvTotalCount.text =  totalQuizzes.toString()
-        _binding.etPageNum.setText(defaultQuizNum.toString())
+        //_binding.tvTotalCount.text =  totalQuizzes.toString()
+        //_binding.etPageNum.setText(defaultQuizNum.toString())
 
 
         // limit total num of digits enter in edittext field
-        _binding.etPageNum.filters = arrayOf<InputFilter>(LengthFilter(totalQuizzes.toString().length))
+        //_binding.etPageNum.filters = arrayOf<InputFilter>(LengthFilter(totalQuizzes.toString().length))
 
 
         //Get the quiz end point
@@ -74,9 +77,11 @@ class QuizFragment : Fragment() {
 //        }
 
 
-        questionList.addAll(getQuestions.readQues(defaultQuizNum, categoryName))
-        questionList.shuffle()
-        getQuestions.close()
+        //questionList.addAll(getQuestions.readQues(defaultQuizNum, categoryName))
+        //questionList.shuffle()
+        //getQuestions.close()
+
+        //question = requireArguments()!!.getParcelable("question")!!
 
 
         btns =
@@ -85,12 +90,12 @@ class QuizFragment : Fragment() {
                 _binding.optionC,
                 _binding.optionD)
 
-        val quesText: String = questionList[0].Question
+        val quesText: String? = arguments?.getString(QUESTION, "")
 
-        val optA: String = questionList[0].OptionA.trim()
-        val optB: String = questionList[0].OptionB.trim()
-        val optC: String = questionList[0].OptionC.trim()
-        val optD: String = questionList[0].OptionD.trim()
+        val optA: String? = arguments?.getString(OPTIONA, "")
+        val optB: String? = arguments?.getString(OPTIONB, "")
+        val optC: String? = arguments?.getString(OPTIONC, "")
+        val optD: String? = arguments?.getString(OPTIOND, "")
 
         val option = arrayOfNulls<String>(4)
         option[0] = optA
@@ -98,8 +103,8 @@ class QuizFragment : Fragment() {
         option[2] = optC
         option[3] = optD
 
-        val options = listOf(*option)
-        Collections.shuffle(options)
+        val options = mutableListOf(*option)
+        options.shuffle()
 
         //ques.setText(question.getQuestion().trim());
         _binding.quizQuestion.text = quesText
@@ -108,17 +113,50 @@ class QuizFragment : Fragment() {
         _binding.optionC.text = optC
         _binding.optionD.text = optD
 
-        answer = questionList[0].Answer.trim()
+        answer = arguments?.getString(ANSWER, "")
 
         radioButtonClicked()
+
+        if (counter != null) counter = null
+        counter = object : CountDownTimer(quizTime, timeSec) {
+            override fun onTick(l: Long) {
+                counterPosition = l
+                _binding.txtProgress.text = String.format("%d", l / 1000)
+                if (getProgress(l) >= 75) {
+                    _binding.progressBar.progressDrawable = ContextCompat.getDrawable(requireContext()
+                            ,R.drawable.custom_progressbar_red)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    _binding.progressBar.setProgress(getProgress(l), true)
+                } else {
+                    _binding.progressBar.progress = getProgress(l)
+                }
+            }
+
+            override fun onFinish() {
+                _binding.txtProgress.text = String.format("%d", 0)
+                _binding.progressBar.progressDrawable = ContextCompat.getDrawable(requireContext()
+                    ,R.drawable.custom_progressbar_red)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    _binding.progressBar.setProgress(100, true)
+                } else {
+                    _binding.progressBar.progress = 100
+                }
+                processAnswer()
+            }
+        }.start()
 
         // Inflate the layout for this fragment
         return _binding.root
     }
 
+    fun getProgress(l: Long): Int {
+        return (15 - l.toInt() / 1000) * 100 / 15
+    }
+
     private fun radioButtonClicked() {
         _binding.quizGroup.setOnCheckedChangeListener { radioGroup, _ ->
-            onButtonClicked(getRadioButton(radioGroup.checkedRadioButtonId))
+            onButtonClicked(getRadioButton(radioGroup.checkedRadioButtonId)!!)
             //disable radiobuttons after click
             for (j in 0 until radioGroup.childCount) {
                 radioGroup.getChildAt(j).isEnabled = false
@@ -128,31 +166,44 @@ class QuizFragment : Fragment() {
     }
 
     private fun processAnswer() {
+
+        if (counter != null) counter!!.cancel()
+        _binding.txtProgress.text = String.format("%d", 0)
+        _binding.progressBar.progress = 0
         _binding.quizGroup.isEnabled = false
+
         val correct: Boolean
-        val optionSelected =
-            Objects.requireNonNull(getRadioButton(_binding.quizGroup.checkedRadioButtonId)).text.toString()
-                .trim { it <= ' ' }
-        correct = optionSelected == answer
-        if (correct) {
-            getRadioButton(_binding.quizGroup.checkedRadioButtonId).setTextColor(
-                ContextCompat.getColor(requireContext(),
-                    android.R.color.white
+
+        if(getRadioButton(_binding.quizGroup.checkedRadioButtonId) != null) {
+            val optionSelected =
+                Objects.requireNonNull(getRadioButton(_binding.quizGroup.checkedRadioButtonId))?.text.toString()
+                    .trim { it <= ' ' }
+            correct = optionSelected == answer
+            if (correct) {
+                getRadioButton(_binding.quizGroup.checkedRadioButtonId)?.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        android.R.color.white
+                    )
                 )
-            )
-            getRadioButton(_binding.quizGroup.checkedRadioButtonId).background =
-                ContextCompat.getDrawable(requireContext(),R.drawable.button_valid)
-        } else {
-            getRadioButton(_binding.quizGroup.checkedRadioButtonId).setTextColor(
-                ContextCompat.getColor(requireContext(),
-                    android.R.color.white
+                getRadioButton(_binding.quizGroup.checkedRadioButtonId)?.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.button_valid)
+            } else {
+                getRadioButton(_binding.quizGroup.checkedRadioButtonId)?.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        android.R.color.white
+                    )
                 )
-            )
-            getRadioButton(_binding.quizGroup.checkedRadioButtonId).background =
-                ContextCompat.getDrawable(requireContext(),R.drawable.button_invalid)
+                getRadioButton(_binding.quizGroup.checkedRadioButtonId)?.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.button_invalid)
+                determineCorrectAnswer()
+            }
+        }else{
+            correct = false
             determineCorrectAnswer()
         }
-        //mListener.onFinished(correct)
+        mListener?.onFinished(correct)
     }
 
     private fun determineCorrectAnswer() {
@@ -171,7 +222,7 @@ class QuizFragment : Fragment() {
         }
     }
 
-    private fun getRadioButton(id: Int): RadioButton {
+    private fun getRadioButton(id: Int): RadioButton? {
         var temp: RadioButton? = null
         when (id) {
             R.id.option_a -> temp = _binding.optionA
@@ -179,7 +230,7 @@ class QuizFragment : Fragment() {
             R.id.option_c -> temp = _binding.optionC
             R.id.option_d -> temp = _binding.optionD
         }
-        return temp!!
+        return temp
     }
 
     private fun onButtonClicked(btn: RadioButton) {
@@ -201,12 +252,58 @@ class QuizFragment : Fragment() {
         btn.isChecked = true
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mListener = if (context is QuizFragmentInterface) {
+            context
+        } else {
+            throw RuntimeException(
+                context.toString()
+                        + " must implement OnFragmentInteractionListener"
+            )
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
+        if (counter != null) {
+            counter!!.cancel()
+            counter = null
+        }
+    }
+
+
+
+    interface QuizFragmentInterface{
+        fun onFinished(correct: Boolean)
+    }
+
 
     companion object {
         const val TAG = "QuizFragment"
-        fun newInstance(categoryName: String): QuizFragment {
+
+        private const val QUESTION = "Question"
+        private const val OPTIONA = "OptionA"
+        private const val OPTIONB = "OptionB"
+        private const val OPTIONC = "OptionC"
+        private const val OPTIOND = "OptionD"
+        private const val ANSWER = "Answer"
+        fun newInstance(
+            question: String,
+            optionA: String,
+            optionB: String,
+            optionC: String,
+            optionD: String,
+            answer: String,
+        ): QuizFragment {
             val args = Bundle()
-            args.putString(QuizModeFragment.QUIZ_CATG, categoryName)
+            args.putString(QUESTION, question)
+            args.putString(OPTIONA, optionA)
+            args.putString(OPTIONB, optionB)
+            args.putString(OPTIONC, optionC)
+            args.putString(OPTIOND, optionD)
+            args.putString(ANSWER, answer)
             val fragment = QuizFragment()
             fragment.arguments = args
             return fragment

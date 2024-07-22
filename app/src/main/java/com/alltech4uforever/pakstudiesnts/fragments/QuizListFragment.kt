@@ -102,7 +102,7 @@ class QuizListFragment : Fragment() {
     }
 
     companion object {
-        const val TAG = "QuizListFragment"
+        //const val TAG = "QuizListFragment"
         const val QUIZ_MODE = "quiz_mode"
         fun newInstance(quizMode: Int, categoryName: String): QuizListFragment {
             val args = Bundle()

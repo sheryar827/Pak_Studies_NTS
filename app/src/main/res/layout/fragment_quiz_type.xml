@@ -52,12 +52,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <RadioButton
+            <!--<RadioButton
                 android:id="@+id/option_challengemode"
                 style="@style/QuizAnswersButton"
                 android:text="@string/challenge_mode"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" />-->
 
         </RadioGroup>
 

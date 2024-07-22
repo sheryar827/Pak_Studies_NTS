@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,18 @@
     android:background="@color/black"
     tools:context=".activities.MainActivity">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/frameLayout2"
+        >
+
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/ablToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -28,15 +39,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvMainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
         android:contentDescription="@string/scroll_fragment"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
 
         <FrameLayout
             android:id="@+id/main_container"
@@ -45,4 +55,146 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/royal_blue">
+
+        <ImageView
+            android:id="@+id/ivPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="@string/prev" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivPrev"
+            app:layout_constraintEnd_toStartOf="@id/ivNext"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        <EditText
+            android:id="@+id/etPageNum"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:textSize="24dp"
+            app:layout_constraintStart_toEndOf="@id/ivPrev"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tvForwardSlash"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text=" : "
+            android:textSize="24dp"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/etPageNum"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tvTotalCount"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textColor="@color/white"
+            android:textSize="24dp"
+            app:layout_constraintStart_toEndOf="@id/tvForwardSlash"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tvTotalCount"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/arrow_go"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:id="@+id/ivNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/baseline_arrow_forward_24"
+            android:contentDescription="@string/next" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/quizPrev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="130dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        app:fabSize="mini"
+        app:pressedTranslationZ="12dp"
+        android:backgroundTint="@color/white"
+        android:elevation="6dp"
+        android:src="@drawable/arrow_prev"
+        />
+    
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/quizNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        app:fabSize="mini"
+        app:pressedTranslationZ="12dp"
+        android:backgroundTint="@color/white"
+        android:elevation="6dp"
+        android:src="@drawable/arrow_next"
+        />
+    
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/goToQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:visibility="invisible"
+        app:fabSize="normal"
+        android:elevation="6dp"
+        android:layout_margin="@dimen/score_btn"
+        app:pressedTranslationZ="12dp"
+        android:src="@drawable/arrow_go"
+        />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

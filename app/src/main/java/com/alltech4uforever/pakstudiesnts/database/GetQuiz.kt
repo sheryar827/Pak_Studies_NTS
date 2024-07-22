@@ -71,6 +71,38 @@ class GetQuiz(context: Context) {
         return questionList
     }
 
+    fun readQuesNoTime(quesStart:Int, tableName: String): ArrayList<QuizModel.QuesModelNOTime>{
+        val questionList = ArrayList<QuizModel.QuesModelNOTime>()
+
+        val c = database!!.rawQuery(
+            "SELECT * FROM $tableName LIMIT $QUESLIMIT OFFSET $quesStart",
+            null
+        ) //cursor to that query
+
+        // Get 10 Questions from database
+        if (c.moveToFirst()) {
+            do {
+                // on below line we are adding the data from
+                // cursor to our array list.
+                val question = QuizModel.QuesModelNOTime(
+                    c.getInt(0),
+                    c.getString(1),
+                    c.getString(2),
+                    c.getString(3),
+                    c.getString(4),
+                    c.getString(5),
+                    c.getString(6)
+                )
+                questionList.add(question)
+            } while (c.moveToNext())
+
+        }
+
+        c.close()
+
+        return questionList
+    }
+
     /*fun readOptionA(i: Int): String //Used to read the data from the Des.db file where id is given and we choose id randomly
     {
         var ans =
