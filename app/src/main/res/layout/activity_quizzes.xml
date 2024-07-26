@@ -32,7 +32,7 @@
                 android:background="@android:color/transparent"
                 app:elevation="0dp"
                 app:layout_scrollFlags="scroll|snap"
-                app:navigationIcon="@drawable/baseline_menu_24"
+                app:navigationIcon="@drawable/baseline_arrow_back_24"
                 app:titleTextColor="@android:color/white">
 
             </androidx.appcompat.widget.Toolbar>

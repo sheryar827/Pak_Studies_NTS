@@ -73,6 +73,10 @@ class QuizzesActivity : AppCompatActivity()
 
         setSupportActionBar(_binding.toolBar)
 
+        _binding.toolBar.setNavigationOnClickListener{
+            this.onBackPressed()
+        }
+
         _binding.ivNext.setOnClickListener(this)
         _binding.ivPrev.setOnClickListener(this)
         _binding.ivGo.setOnClickListener(this)
@@ -229,7 +233,6 @@ class QuizzesActivity : AppCompatActivity()
         // limit total num of digits enter in edittext field
         _binding.etPageNum.filters = arrayOf<InputFilter>(InputFilterMinMax("1", totalQuizzes.toString()))
 
-
         updateQuestion()
     }
 
@@ -256,10 +259,16 @@ class QuizzesActivity : AppCompatActivity()
         //}
     }
 
+    fun stopCounterInFragment() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.main_container) as? QuizFragment
+        fragment?.stopCounter()
+    }
+
     private fun replaceFragment(frag: Fragment?, key: String?) {
 
         /*supportFragmentManager.popBackStack(QuizCategoryFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)*/
 
+        stopCounterInFragment()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_container, frag!!, key)

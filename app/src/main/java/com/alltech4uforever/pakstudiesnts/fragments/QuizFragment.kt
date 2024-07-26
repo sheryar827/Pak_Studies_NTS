@@ -23,7 +23,7 @@ class QuizFragment : Fragment() {
     //private var ans: String = ""
     //private var quesNumber = 0
 
-    private var counter: CountDownTimer? = null
+    var counter: CountDownTimer? = null
     private val quizTime: Long = 15000
     private val timeSec: Long = 1000
     private var counterPosition: Long = 0
@@ -165,12 +165,20 @@ class QuizFragment : Fragment() {
         }
     }
 
-    private fun processAnswer() {
-
-        if (counter != null) counter!!.cancel()
+    fun stopCounter() {
+        counter?.cancel()
         _binding.txtProgress.text = String.format("%d", 0)
         _binding.progressBar.progress = 0
         _binding.quizGroup.isEnabled = false
+    }
+
+    private fun processAnswer() {
+
+        stopCounter()
+        /*if (counter != null) counter!!.cancel()
+        _binding.txtProgress.text = String.format("%d", 0)
+        _binding.progressBar.progress = 0
+        _binding.quizGroup.isEnabled = false*/
 
         val correct: Boolean
 
@@ -262,6 +270,7 @@ class QuizFragment : Fragment() {
                         + " must implement OnFragmentInteractionListener"
             )
         }
+
     }
 
     override fun onDetach() {
@@ -277,6 +286,10 @@ class QuizFragment : Fragment() {
 
     interface QuizFragmentInterface{
         fun onFinished(correct: Boolean)
+    }
+
+    interface CounterControlInterface {
+        fun stopCounter(counter: CountDownTimer)
     }
 
 

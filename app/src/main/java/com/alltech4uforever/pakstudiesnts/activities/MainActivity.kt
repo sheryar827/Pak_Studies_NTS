@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.alltech4uforever.pakstudiesnts.R
-import com.alltech4uforever.pakstudiesnts.database.GetQuiz
 import com.alltech4uforever.pakstudiesnts.databinding.ActivityMainBinding
 import com.alltech4uforever.pakstudiesnts.fragments.QuizCategoryFragment
 import com.alltech4uforever.pakstudiesnts.fragments.QuizModeFragment
@@ -24,15 +22,15 @@ class MainActivity : AppCompatActivity(),
     private lateinit var _binding : ActivityMainBinding
     private var hiddenToolbar = false
 
-    private lateinit var getQuestions : GetQuiz
+    //private lateinit var getQuestions : GetQuiz
 
     //private var questionList : ArrayList<QuizModel.QuestionModel>? = ArrayList()
 
-    private val defaultQuizNum = 1
+    //private val defaultQuizNum = 1
 
-    private var questionPosition = 0
+    //private var questionPosition = 0
 
-    private var coinsCount: Int = 0
+    //private var coinsCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,7 +91,11 @@ class MainActivity : AppCompatActivity(),
         } else {
             supportActionBar!!.title = getString(R.string.quiz_ctg)
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_menu_24)
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
+            _binding.activityContentMain.toolBar.setNavigationOnClickListener{
+                this.onBackPressed()
+            }
+            /*supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_menu_24)*/
             /*_binding.activityContentMain.toolBar.setNavigationOnClickListener {
                 _binding.drawerLayout.openDrawer(
                     GravityCompat.START
@@ -102,9 +104,9 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun onMenuClose() {
+    /*private fun onMenuClose() {
         _binding.drawerLayout.closeDrawers()
-    }
+    }*/
 
 
     private fun replaceFragment(frag: Fragment?, key: String?) {
