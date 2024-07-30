@@ -144,10 +144,56 @@ class QuizzesActivity : AppCompatActivity()
         when (mode) {
             0 -> {
                 //getQuestions()
-                replaceFragment(NoTimeModeQuizFragment.newInstance(firstQuestion, categoryName), NoTimeModeQuizFragment.TAG)
+                replaceFragment(NoTimeModeQuizFragment.newInstance(firstQuestion, 0, categoryName), NoTimeModeQuizFragment.TAG)
             }
             2 -> {
                 getQuestions()
+            }
+
+            4 -> {
+                //if (counter != null) counter = null
+                resetCounter()
+                _binding.progressBar.progressDrawable = ContextCompat.getDrawable(applicationContext
+                    ,R.drawable.custom_progress_bar_horizontal)
+
+                counter = object : CountDownTimer(quizTime, timeSec) {
+                    override fun onTick(l: Long) {
+                        if (getProgress(l) >= 75) {
+                            _binding.progressBar.progressDrawable = ContextCompat.getDrawable(applicationContext
+                                ,R.drawable.custom_progressbar_red_horizontal)
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            _binding.progressBar.setProgress(getProgress(l), true)
+                        } else {
+                            _binding.progressBar.progress = getProgress(l)
+                        }
+                    }
+
+                    override fun onFinish() {
+                        _binding.progressBar.progressDrawable = ContextCompat.getDrawable(applicationContext
+                            ,R.drawable.custom_progressbar_red_horizontal)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            _binding.progressBar.setProgress(100, true)
+                        } else {
+                            _binding.progressBar.progress = 100
+                        }
+                        var correctAns: Int = 0
+                        var quesCount: Int = 0
+
+                        val sharedViewModel = ViewModelProvider(this@QuizzesActivity)[SharedViewModel::class.java]
+                        sharedViewModel.correctAns.observe(this@QuizzesActivity, Observer {
+                            correctAns = it
+                        })
+                        sharedViewModel.quesCount.observe(this@QuizzesActivity, Observer{
+                            quesCount = it
+                        })
+
+                        showCelebrationDialog(correctAns, quesCount)
+                        //processAnswer()
+                    }
+                }.start()
+                replaceFragment(NoTimeModeQuizFragment.newInstance(firstQuestion, 4, categoryName), NoTimeModeQuizFragment.TAG)
+
             }
 
             3 -> {
@@ -192,7 +238,7 @@ class QuizzesActivity : AppCompatActivity()
                         //processAnswer()
                     }
                 }.start()
-                replaceFragment(NoTimeModeQuizFragment.newInstance(firstQuestion, categoryName), NoTimeModeQuizFragment.TAG)
+                replaceFragment(NoTimeModeQuizFragment.newInstance(firstQuestion,3, categoryName), NoTimeModeQuizFragment.TAG)
             }
 
             else -> {
@@ -200,6 +246,11 @@ class QuizzesActivity : AppCompatActivity()
                 replaceFragment(PracticeFragment.newInstance(firstQuestion, categoryName), PracticeFragment.TAG)
             }
         }
+    }
+
+    private fun getRandomQuestions() {
+        val getQuestions = GetQuiz.getInstance(this)!!
+        getQuestions.open()
     }
 
     private fun getQuestions() {

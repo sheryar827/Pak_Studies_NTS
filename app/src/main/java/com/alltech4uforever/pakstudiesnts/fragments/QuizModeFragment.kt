@@ -30,6 +30,7 @@ class QuizModeFragment : Fragment(),
         _binding.optionTimemode.setOnClickListener(this)
         _binding.optionBeatthetimemode.setOnClickListener(this)
         _binding.optionPrepmode.setOnClickListener(this)
+        _binding.optionChapmode.setOnClickListener(this)
 
         // Inflate the layout for this fragment
         return _binding.root
@@ -53,6 +54,10 @@ class QuizModeFragment : Fragment(),
 
             _binding.optionPrepmode -> {
                 mListener?.preparationMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
+            }
+
+            _binding.optionChapmode -> {
+                mListener?.challengeMode(arguments?.getString(QUIZ_CATG, DEFAULT_CATG)!!)
             }
 
         }
@@ -81,6 +86,7 @@ class QuizModeFragment : Fragment(),
         fun timeMode(quizCategory: String)
         fun beatTheTimeMode(quizCategory: String)
         fun preparationMode(quizCategory: String)
+        fun challengeMode(quizCategory: String)
     }
 
     companion object {

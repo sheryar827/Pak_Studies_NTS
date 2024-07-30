@@ -223,6 +223,17 @@ class MainActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
+    override fun challengeMode(categoryName: String) {
+        val intent = Intent(this@MainActivity, QuizzesActivity::class.java)
+        val b = Bundle()
+        b.putInt("QUIZMODE", 4)
+        b.putString("CATEGORYNAME", categoryName) //Your id
+
+        intent.putExtras(b) //Put your id to your next Intent
+
+        startActivity(intent)
+    }
+
     /*override fun startQuiz(pageKey: Int, categoryName: String) {
         val frag = supportFragmentManager.findFragmentByTag(QuizFragment.TAG)
         if (!(frag != null && frag.isVisible)) {

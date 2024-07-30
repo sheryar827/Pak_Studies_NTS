@@ -48,25 +48,57 @@ class GetQuiz(context: Context) {
         ) //cursor to that query
 
         // Get 10 Questions from database
-            if (c.moveToFirst()) {
-                do {
-                    // on below line we are adding the data from
-                    // cursor to our array list.
-                    val question = QuizModel.QuestionModel(
-                        c.getInt(0),
-                        c.getString(1),
-                        c.getString(2),
-                        c.getString(3),
-                        c.getString(4),
-                        c.getString(5),
-                        c.getString(6)
-                    )
-                    questionList.add(question)
-                } while (c.moveToNext())
+        if (c.moveToFirst()) {
+            do {
+                // on below line we are adding the data from
+                // cursor to our array list.
+                val question = QuizModel.QuestionModel(
+                    c.getInt(0),
+                    c.getString(1),
+                    c.getString(2),
+                    c.getString(3),
+                    c.getString(4),
+                    c.getString(5),
+                    c.getString(6)
+                )
+                questionList.add(question)
+            } while (c.moveToNext())
 
-            }
+        }
 
-            c.close()
+        c.close()
+
+        return questionList
+    }
+
+    fun readRandomQues(quesStart:Int, tableName: String): ArrayList<QuizModel.QuesModelNOTime>{
+        val questionList = ArrayList<QuizModel.QuesModelNOTime>()
+
+        val c = database!!.rawQuery(
+            "SELECT * FROM $tableName ORDER BY RANDOM() LIMIT $QUESLIMIT OFFSET $quesStart",
+            null
+        ) //cursor to that query
+
+        // Get 10 Questions from database
+        if (c.moveToFirst()) {
+            do {
+                // on below line we are adding the data from
+                // cursor to our array list.
+                val question = QuizModel.QuesModelNOTime(
+                    c.getInt(0),
+                    c.getString(1),
+                    c.getString(2),
+                    c.getString(3),
+                    c.getString(4),
+                    c.getString(5),
+                    c.getString(6)
+                )
+                questionList.add(question)
+            } while (c.moveToNext())
+
+        }
+
+        c.close()
 
         return questionList
     }

@@ -104,7 +104,7 @@ class NoTimeModeQuizFragment : Fragment() {
 
     private fun getQuestions() {
 
-        //val b = intent.extras
+        val quizMode = arguments?.getInt(QUIZ_MODE,0)
         //var categoryName = "" // or other values
 
         /*if (b != null)
@@ -130,10 +130,18 @@ class NoTimeModeQuizFragment : Fragment() {
             FIRST_QUES,
             1)
 
+        if(quizMode != 4)
         questionList?.addAll(getQuestions.readQuesNoTime(firstQuestion!!, arguments?.getString(
             QuizModeFragment.QUIZ_CATG,
             QuizModeFragment.DEFAULT_CATG
         )!!))
+
+        //get random questions
+        else
+            questionList?.addAll(getQuestions.readRandomQues(firstQuestion!!, arguments?.getString(
+                QuizModeFragment.QUIZ_CATG,
+                QuizModeFragment.DEFAULT_CATG
+            )!!))
 
         questionList?.shuffle()
 
@@ -179,9 +187,11 @@ class NoTimeModeQuizFragment : Fragment() {
         const val TAG = "NoTimeModeQuizFragment"
         private const val QUIZ_CATG = "quiz_category"
         const val FIRST_QUES = "first_question"
-        fun newInstance(firstQuestion: Int, quizCategory: String): NoTimeModeQuizFragment {
+        private const val QUIZ_MODE = "quiz_mode"
+        fun newInstance(firstQuestion: Int, quizMode: Int, quizCategory: String): NoTimeModeQuizFragment {
             val args = Bundle()
             args.putString(QUIZ_CATG , quizCategory)
+            args.putInt(QUIZ_MODE, quizMode)
             args.putInt(FIRST_QUES, firstQuestion)
             val fragment = NoTimeModeQuizFragment()
             fragment.arguments = args
