@@ -35,5 +35,10 @@
         <item name="android:layout_marginTop">@dimen/quiz_question_radioButton_margin</item>
     </style>
 
+    <style name="SearchView">
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alltech4uforever.pakstudiesnts.adapters.QuizListAdapter
 import com.alltech4uforever.pakstudiesnts.database.GetQuiz
@@ -23,6 +24,7 @@ class QuizCategoryFragment : Fragment() {
 
     private lateinit var quizCategoryList: ArrayList<QuizModel>
 
+
     private val adapterList by lazy { QuizListAdapter() }
 
 
@@ -36,6 +38,8 @@ class QuizCategoryFragment : Fragment() {
 
         quizCategoryList.addAll(getQuizCategories.getTableName())
 
+
+
     }
 
     override fun onCreateView(
@@ -44,6 +48,20 @@ class QuizCategoryFragment : Fragment() {
     ): View {
 
         _binding = FragmentQuizCategoryBinding.inflate(inflater, container, false)
+
+        // Listen for search query changes
+        _binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Pass the search query to the fragment
+                filterList(newText.orEmpty())
+                return true
+            }
+        })
+
 
         _binding.rvQuizCategory.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -64,6 +82,24 @@ class QuizCategoryFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return _binding.root
+    }
+
+    fun filterList(query: String) {
+        val filteredList = quizCategoryList.filter {
+            if (it is QuizModel.QuizCategoryModel) {
+                it.categoryName?.contains(query, ignoreCase = true) == true
+            } else {
+                false
+            }
+        }
+        //println("Filtered List: $quizCategoryList")
+        // Print to the console
+        //println("Filtered List: $filteredList")
+        adapterList.updateList(ArrayList(filteredList))
+//        val filteredList = quizCategoryList.filter {
+//            it.categoryName.contains(query, ignoreCase = true)
+//        }
+//        adapterList.updateList(filteredList)
     }
 
     override fun onAttach(context: Context) {

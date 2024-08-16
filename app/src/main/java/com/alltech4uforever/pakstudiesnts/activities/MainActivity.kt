@@ -3,6 +3,7 @@ package com.alltech4uforever.pakstudiesnts.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var _binding : ActivityMainBinding
     private var hiddenToolbar = false
+    lateinit var onBackPressedCallback: OnBackPressedCallback
 
     //private lateinit var getQuestions : GetQuiz
 
@@ -64,6 +66,26 @@ class MainActivity : AppCompatActivity(),
 
         setUpToolbar(hiddenToolbar)
 
+        // Register the OnBackPressedCallback
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val fragments = supportFragmentManager.backStackEntryCount
+                if (fragments == 1) {
+                    finish()
+                } else if (fragments > 1) {
+                    supportFragmentManager.popBackStack()
+                } else {
+                    if (isEnabled) {
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+
+                setTitleBar()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
     }
 
     private fun fixMinDrawerMargin(drawerLayout: DrawerLayout) {
@@ -93,7 +115,8 @@ class MainActivity : AppCompatActivity(),
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
             _binding.activityContentMain.toolBar.setNavigationOnClickListener{
-                this.onBackPressed()
+                //this.onBackPressed()
+                onBackPressedCallback.handleOnBackPressed()
             }
             /*supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_menu_24)*/
             /*_binding.activityContentMain.toolBar.setNavigationOnClickListener {
@@ -276,7 +299,7 @@ class MainActivity : AppCompatActivity(),
         }, 2000)
     }*/
 
-    override fun onBackPressed() {
+    /*override fun onBackPressed() {
 
         val fragments = supportFragmentManager.backStackEntryCount
         if (fragments == 1) {
@@ -288,7 +311,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         setTitleBar()
-    }
+    }*/
 
     private fun setTitleBar() {
         val fragmentManager = supportFragmentManager
@@ -301,6 +324,12 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Optionally, you can remove the callback when the activity is destroyed
+        onBackPressedCallback.remove()
     }
 
     /*override fun onBackPressed() {

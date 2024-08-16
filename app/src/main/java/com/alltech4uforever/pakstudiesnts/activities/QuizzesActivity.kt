@@ -128,6 +128,7 @@ class QuizzesActivity : AppCompatActivity()
         val getQuestions = GetQuiz.getInstance(this)!!
         getQuestions.open()
 
+        supportActionBar!!.title = categoryName
         _binding.frameLayout2.visibility = View.VISIBLE
         // 10 questions per quiz
         totalQuizzes = getQuestions.quesCount(categoryName)/10
@@ -290,7 +291,7 @@ class QuizzesActivity : AppCompatActivity()
     private fun updateQuestion() {
         //val frag = supportFragmentManager.findFragmentByTag(QuizFragment.TAG)
         //if (!(frag != null && frag.isVisible)) {
-        supportActionBar!!.title = getString(R.string.app_name)
+        supportActionBar!!.title = categoryName//getString(R.string.app_name)
         supportActionBar!!.subtitle = String.format(
             String.format(
                 "Question %d/%d",
